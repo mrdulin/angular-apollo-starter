@@ -6,13 +6,15 @@ import { FollowersComponent } from './followers/followers.component';
 import { RepositoryComponent } from './repositories/repository/repository.component';
 import { UploadComponent } from './upload/upload.component';
 import { SubscriptionComponent } from './subscription/subscription.component';
+import { AdComponent } from './ad/ad.component';
 
 const routes: Routes = [
   { path: 'repoes', component: RepositoryListComponent },
   { path: 'followers', component: FollowersComponent },
   { path: 'repo/:name', component: RepositoryComponent },
   { path: 'upload', component: UploadComponent },
-  { path: 'subscription', component: SubscriptionComponent }
+  { path: 'subscription', component: SubscriptionComponent },
+  { path: 'ads', component: AdComponent }
 ];
 
 @NgModule({

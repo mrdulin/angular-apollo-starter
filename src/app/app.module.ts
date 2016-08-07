@@ -16,9 +16,16 @@ import { GraphqlModule } from './graphql/graphql.module';
 import { FollowersComponent } from './followers/followers.component';
 import { UploadComponent } from './upload/upload.component';
 import { SubscriptionComponent } from './subscription/subscription.component';
+import { AdComponent } from './ad/ad.component';
 
 @NgModule({
-  declarations: [AppComponent, FollowersComponent, UploadComponent, SubscriptionComponent],
+  declarations: [
+    AppComponent,
+    FollowersComponent,
+    UploadComponent,
+    SubscriptionComponent,
+    AdComponent
+  ],
   imports: [
     BrowserModule,
     CoreModule,

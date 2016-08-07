@@ -1,7 +1,10 @@
 import { NgModule } from '@angular/core';
 import { ApolloModule, Apollo } from 'apollo-angular';
 import { HttpLinkModule } from 'apollo-angular-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import {
+  InMemoryCache,
+  IntrospectionFragmentMatcher
+} from 'apollo-cache-inmemory';
 import { split, from } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 import { OperationDefinitionNode } from 'graphql';
@@ -11,6 +14,7 @@ import { AuthService } from '../core/auth.service';
 import { SubscriptionService } from '../core/subscription.service';
 import { WebSocketLink } from 'apollo-link-ws';
 import { errorLink, uploadLink, createAuthLink } from '../graphql/middlewares';
+import introspectionQueryResultData from '../../assets/fragmentTypes.json';
 
 @NgModule({
   declarations: [],
@@ -19,8 +23,14 @@ import { errorLink, uploadLink, createAuthLink } from '../graphql/middlewares';
   providers: []
 })
 export class GraphqlModule {
-  constructor(apollo: Apollo, authService: AuthService, subscriptionService: SubscriptionService) {
-    const WS_URI = `wss://${environment.HOST}:${environment.PORT}${environment.WS_PATH}`;
+  constructor(
+    apollo: Apollo,
+    authService: AuthService,
+    subscriptionService: SubscriptionService
+  ) {
+    const WS_URI = `wss://${environment.HOST}:${environment.PORT}${
+      environment.WS_PATH
+    }`;
 
     const wsClient = subscriptionService.getWSClient(WS_URI, {
       lazy: true,
@@ -46,7 +56,9 @@ export class GraphqlModule {
 
     const networkLink = split(
       ({ query }) => {
-        const { kind, operation } = getMainDefinition(query) as OperationDefinitionNode;
+        const { kind, operation } = getMainDefinition(
+          query
+        ) as OperationDefinitionNode;
         return kind === 'OperationDefinition' && operation === 'subscription';
       },
       wsLink,
@@ -54,10 +66,13 @@ export class GraphqlModule {
     );
 
     const authLink = createAuthLink(authService);
+    const fragmentMatcher = new IntrospectionFragmentMatcher({
+      introspectionQueryResultData
+    });
 
     apollo.create({
       link: from([authLink, errorLink, networkLink]),
-      cache: new InMemoryCache()
+      cache: new InMemoryCache({ fragmentMatcher })
     });
   }
 }

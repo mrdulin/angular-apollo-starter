@@ -1,19 +1,12 @@
 <div>
-  <p>username: {{loading ? 'loading...' : user?.name}}</p>
+  <p>username: {{ loading ? 'loading...' : user?.name }}</p>
   <div>
     <ul>
-      <li>
-        <a routerLink='/repoes' routerLinkActive="active">repoes</a>
-      </li>
-      <li>
-        <a routerLink='/followers' routerLinkActive='active'>followers</a>
-      </li>
-      <li>
-        <a routerLink='/upload' routerLinkActive='active'>upload</a>
-      </li>
-      <li>
-        <a routerLink='/subscription' routerLinkActive='active'>subscription</a>
-      </li>
+      <li><a routerLink="/repoes" routerLinkActive="active">repoes</a></li>
+      <li><a routerLink="/followers" routerLinkActive="active">followers</a></li>
+      <li><a routerLink="/upload" routerLinkActive="active">upload</a></li>
+      <li><a routerLink="/subscription" routerLinkActive="active">subscription</a></li>
+      <li><a routerLink="/ads" routerLinkActive="active">ads</a></li>
     </ul>
   </div>
   <!-- <div *ngIf="!!user"> -->
