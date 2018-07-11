@@ -20,7 +20,13 @@
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
+    "apollo-angular": "^1.1.2",
+    "apollo-angular-link-http": "^1.1.1",
+    "apollo-cache-inmemory": "^1.2.5",
+    "apollo-client": "^2.3.5",
     "core-js": "^2.5.4",
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
   },
