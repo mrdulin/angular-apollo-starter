@@ -15,6 +15,11 @@ export class RepositoryComponent implements OnInit, OnDestroy {
   repoSubscription: Subscription;
   repo: any = {};
 
+  topicEditing = false;
+  topicsString: string[];
+
+  private newTopics: string[];
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -35,5 +40,40 @@ export class RepositoryComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.repoSubscription.unsubscribe();
+  }
+
+  private onEditTopics() {
+    console.log('onEditTopics');
+    this.topicEditing = true;
+    this.topicsString = this.repo.repositoryTopics.nodes.map(node => node.topic.name);
+  }
+
+  private onEditTopicsDone(newTopicsString: string) {
+    console.log('onEditTopicsDone');
+    this.topicEditing = false;
+    // TODO: mutation
+
+    this.newTopics = newTopicsString.split(',').map(topicString => topicString.trim());
+    console.log('newTopics: ', this.newTopics);
+
+    this.repoService
+      .updateTopics({
+        repositoryId: this.repo.id,
+        topicNames: this.newTopics,
+        clientMutationId: '123'
+      })
+      .subscribe(
+        data => {
+          console.log('update topics success: ', data);
+        },
+        err => {
+          console.log('update topics failed: ', err);
+        }
+      );
+  }
+
+  private onEditTopicsEnter(newTopicsString: string) {
+    console.log('newTopicsString: ', newTopicsString);
+    // TODO: update view
   }
 }

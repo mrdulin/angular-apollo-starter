@@ -1,6 +1,18 @@
 <section>
   <h2>{{repo?.name}}</h2>
-  <div *ngFor='let node of repo.repositoryTopics?.nodes'>
-    <a>{{node.topic.name}}</a>
+  <div *ngIf="!topicEditing">
+    <div *ngFor='let node of repo.repositoryTopics?.nodes'>
+      <a>{{node.topic.name}}</a>
+    </div>
   </div>
+
+  <div [style.display]='topicEditing ? "none" : "block"'>
+    <button *ngIf="repo.repositoryTopics?.totalCount" (click)="onEditTopics()" type="button">Manage topics</button>
+    <button *ngIf='!repo.repositoryTopics?.totalCount' (click)="onEditTopics()" type="button">Add topics</button>
+  </div>
+  <div [style.display]='topicEditing ? "block" : "none"'>
+    <input #topicInput type="text" value="{{topicsString}}" (keyup.enter)="onEditTopicsEnter(topicInput.value)">
+    <button (click)="onEditTopicsDone(topicInput.value)" type="button">Done</button>
+  </div>
+
 </section>

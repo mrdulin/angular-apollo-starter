@@ -38,7 +38,7 @@ import { FollowersComponent } from './followers/followers.component';
 export class AppModule {
   constructor(apollo: Apollo, httpLink: HttpLink) {
     const auth = setContext((operation: GraphQLRequest, prevContext: any) => {
-      const jwt: string = localStorage.getItem('jwt') || 'c2f6fcbccef39063bb1ae00379ebe3e30165fc89';
+      const jwt: string = localStorage.getItem('jwt') || '064ee475c7d4d92bcd04504853a3f16bb3dc572a';
 
       if (!jwt) {
         return {};
