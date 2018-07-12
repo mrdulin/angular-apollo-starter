@@ -1,8 +1,16 @@
 <div>
   <p>username: {{user?.name}}</p>
   <div>
-    <a routerLink='/repo' routerLinkActive="active">repos</a>
-    <a routerLink='/followers' routerLinkActive='active'>followers</a>
+    <ul>
+      <li>
+        <a routerLink='/repo' routerLinkActive="active">repos</a>
+      </li>
+      <li>
+        <a routerLink='/followers' routerLinkActive='active'>followers</a>
+      </li>
+    </ul>
   </div>
-  <router-outlet></router-outlet>
+  <div *ngIf="!!user">
+    <router-outlet></router-outlet>
+  </div>
 </div>

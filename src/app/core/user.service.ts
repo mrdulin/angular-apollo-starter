@@ -4,25 +4,7 @@ import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs';
 
 import 'rxjs/add/operator/map';
-
-import gql from 'graphql-tag';
-
-const userQuery = gql`
-  query($login: String!, $first: Int) {
-    user(login: $login) {
-      avatarUrl
-      login
-      name
-      followers(first: $first) {
-        nodes {
-          name
-          login
-        }
-        totalCount
-      }
-    }
-  }
-`;
+import { userQuery } from '../core/user.gql';
 
 @Injectable()
 export class UserService {
@@ -38,10 +20,17 @@ export class UserService {
         }
       })
       .valueChanges.map(res => {
+        const { data, ...rest } = res;
         return {
-          user: res.data.user,
-          ...res
+          user: data.user,
+          ...rest
         };
       });
+  }
+
+  public getRepos(login: string): Observable<any[]> {
+    return this.query(login).map(data => {
+      return data.user.repositories;
+    });
   }
 }
