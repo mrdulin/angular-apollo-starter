@@ -15,6 +15,7 @@ const userQuery = gql`
       }
       repositories(first: $first) {
         nodes {
+          id
           name
         }
         totalCount

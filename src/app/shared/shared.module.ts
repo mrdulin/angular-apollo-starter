@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+
 import { SelectPipe } from './select.pipe';
 
 @NgModule({

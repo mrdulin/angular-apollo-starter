@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-import { userQuery } from '../core/user.gql';
-import { UserService } from '../core/user.service';
+import { userQuery } from '../../core/user.gql';
+import { UserService } from '../../core/user.service';
 
 @Component({
-  templateUrl: './repositories.component.html'
+  templateUrl: './repository-list.component.html'
 })
-export class RepositoriesComponent implements OnInit {
+export class RepositoryListComponent implements OnInit {
   repos: any[];
 
   constructor(private userService: UserService) {}

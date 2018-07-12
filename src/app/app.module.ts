@@ -8,23 +8,37 @@ import { setContext } from 'apollo-link-context';
 import { GraphQLRequest } from 'apollo-link';
 
 import { AppComponent } from './app.component';
-import { SharedModule } from './shared/shared.module';
-import { AppRoutingModule } from './app-routing.module';
-import { CoreModule } from './core/core.module';
 
-import { RepositoriesComponent } from './repositories/repositories.component';
+// 共享模块
+import { SharedModule } from './shared/shared.module';
+// 路由模块
+import { AppRoutingModule } from './app-routing.module';
+// 核心模块
+import { CoreModule } from './core/core.module';
+// 特性模块
+import { RepositoriesModule } from './repositories/repositories.module';
+
 import { FollowersComponent } from './followers/followers.component';
 
 @NgModule({
-  declarations: [AppComponent, RepositoriesComponent, FollowersComponent],
-  imports: [BrowserModule, CoreModule, AppRoutingModule, HttpClientModule, ApolloModule, HttpLinkModule, SharedModule],
+  declarations: [AppComponent, FollowersComponent],
+  imports: [
+    BrowserModule,
+    CoreModule,
+    AppRoutingModule,
+    HttpClientModule,
+    ApolloModule,
+    HttpLinkModule,
+    SharedModule,
+    RepositoriesModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(apollo: Apollo, httpLink: HttpLink) {
     const auth = setContext((operation: GraphQLRequest, prevContext: any) => {
-      const jwt: string = localStorage.getItem('jwt') || '88d43a43d1601ccfd6f536885f685eb925b3fa0f';
+      const jwt: string = localStorage.getItem('jwt') || 'c2f6fcbccef39063bb1ae00379ebe3e30165fc89';
 
       if (!jwt) {
         return {};

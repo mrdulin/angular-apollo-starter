@@ -1,0 +1,7 @@
+<section>
+  <ul *ngFor='let repo of repos'>
+    <li>
+      <a routerLink="/repo/{{repo.name}}">{{repo.name}}</a>
+    </li>
+  </ul>
+</section>
