@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const repoes = gql`
+const REPOES = gql`
   query($login: String!, $first: Int, $after: String) {
     user(login: $login) {
       repositories(first: $first, after: $after) {
@@ -17,4 +17,4 @@ const repoes = gql`
   }
 `;
 
-export { repoes };
+export { REPOES };

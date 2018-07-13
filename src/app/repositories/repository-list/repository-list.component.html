@@ -1,8 +1,10 @@
 <section>
+  <p *ngIf='repoLoading'>loading...</p>
   <ul *ngFor='let repo of repoes'>
     <li>
       <a routerLink="/repo/{{repo.node.name}}">{{repo.node.name}}</a>
     </li>
   </ul>
+  <p *ngIf='moreLoading'>load more...</p>
   <button type='button' (click)="onLoadMore()">loadmore</button>
 </section>

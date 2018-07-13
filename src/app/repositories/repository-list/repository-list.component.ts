@@ -1,27 +1,49 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { RepoService } from '../../core/repo.service';
 
 @Component({
   templateUrl: './repository-list.component.html'
 })
-export class RepositoryListComponent implements OnInit {
+export class RepositoryListComponent implements OnInit, OnDestroy {
+  repoLoading: boolean;
   repoes: any[];
+  repoesSub: Subscription;
+
+  moreLoading: boolean;
+
   loginName = 'mrdulin';
   first = 1;
 
   constructor(private repoService: RepoService) {}
 
   ngOnInit() {
-    this.repoService.getRepoes(this.loginName, this.first).subscribe((result: any) => {
+    this.repoLoading = true;
+    this.repoesSub = this.repoService.getRepoes(this.loginName, this.first).subscribe((result: any) => {
+      this.repoLoading = result.loading;
       this.repoes = result.repoes.edges;
     });
+  }
+
+  ngOnDestroy() {
+    this.repoesSub.unsubscribe();
   }
 
   private onLoadMore() {
     console.log('onLoadMore');
     const lastRepo = this.repoes[this.repoes.length - 1];
     const after: string = lastRepo.cursor;
-    this.repoService.getRepoesMore(this.loginName, this.first, after);
+
+    this.moreLoading = true;
+    this.repoService
+      .getRepoesMore(this.loginName, this.first, after)
+      .then(result => {
+        this.moreLoading = result.loading;
+      })
+      .catch(err => {
+        this.moreLoading = false;
+        console.log('repo load more error: ', err);
+      });
   }
 }

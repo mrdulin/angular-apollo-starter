@@ -1,1 +1,1 @@
-export { updateTopics } from './updateTopics.gql';
+export { UPDATE_TOPICS } from './updateTopics.gql';

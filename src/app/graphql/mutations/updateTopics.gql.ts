@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const updateTopics = gql`
+const UPDATE_TOPICS = gql`
   mutation($input: UpdateTopicsInput!) {
     updateTopics(input: $input) {
       clientMutationId
@@ -9,4 +9,4 @@ const updateTopics = gql`
   }
 `;
 
-export { updateTopics };
+export { UPDATE_TOPICS };

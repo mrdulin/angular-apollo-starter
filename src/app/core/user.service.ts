@@ -13,7 +13,7 @@ export class UserService {
   public query(login: string): Observable<any> {
     return this.apollo
       .watchQuery<any>({
-        query: Q.user,
+        query: Q.USER,
         variables: { login }
       })
       .valueChanges.map(res => {

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const followers = gql`
+const FOLLOWERS = gql`
   query($login: String!, $first: Int, $after: String) {
     user(login: $login) {
       followers(first: $first, after: $after) {
@@ -19,4 +19,4 @@ const followers = gql`
   }
 `;
 
-export { followers };
+export { FOLLOWERS };

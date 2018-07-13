@@ -1,3 +1,4 @@
-export { followers } from './followers.gql';
-export { user } from './user.gql';
-export { repoes } from './repoes.gql';
+export { FOLLOWERS } from './followers.gql';
+export { USER } from './user.gql';
+export { REPOES } from './repoes.gql';
+export { TOPICS } from './topics.gql';

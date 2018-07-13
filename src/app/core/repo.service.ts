@@ -3,7 +3,6 @@ import { Apollo, QueryRef } from 'apollo-angular';
 import { FetchResult } from 'apollo-link';
 import findIndex from 'core-js/library/fn/array/find-index';
 
-import { RepoQuery } from './repo.gql';
 import { Observable } from 'rxjs';
 
 import * as Q from '../graphql/queries';
@@ -26,7 +25,7 @@ export class RepoService {
 
   public getRepoes(login: string, first: number): Observable<any> {
     this.repoQuery = this.apollo.watchQuery<any>({
-      query: Q.repoes,
+      query: Q.REPOES,
       variables: {
         login,
         first
@@ -77,7 +76,7 @@ export class RepoService {
     };
     return this.apollo
       .watchQuery<any>({
-        query: RepoQuery,
+        query: Q.TOPICS,
         variables: this.repoQueryVariables
       })
       .valueChanges.map((res: any) => {
@@ -88,7 +87,7 @@ export class RepoService {
 
   public updateTopics(updateTopicsInput: IUpdateTopicsInput): Observable<any> {
     return this.apollo.mutate<any>({
-      mutation: M.updateTopics,
+      mutation: M.UPDATE_TOPICS,
       variables: {
         input: updateTopicsInput
       },
@@ -98,7 +97,7 @@ export class RepoService {
         } = mutationResult;
         if (!updateTopics.invalidTopicNames) {
           let nextNodes: any[];
-          const data: any = proxy.readQuery({ query: RepoQuery, variables: this.repoQueryVariables });
+          const data: any = proxy.readQuery({ query: Q.TOPICS, variables: this.repoQueryVariables });
           // console.log('updateTopicsInput.topicNames: ', updateTopicsInput.topicNames);
 
           const {
@@ -137,7 +136,7 @@ export class RepoService {
 
           repositoryTopics.nodes = nextNodes;
 
-          proxy.writeQuery({ query: RepoQuery, variables: this.repoQueryVariables, data });
+          proxy.writeQuery({ query: Q.TOPICS, variables: this.repoQueryVariables, data });
         }
       }
     });

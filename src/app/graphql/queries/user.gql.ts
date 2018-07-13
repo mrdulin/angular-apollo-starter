@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const user = gql`
+const USER = gql`
   query($login: String!) {
     user(login: $login) {
       avatarUrl
@@ -10,4 +10,4 @@ const user = gql`
   }
 `;
 
-export { user };
+export { USER };

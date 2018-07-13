@@ -20,6 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const loginName = 'mrdulin';
+    this.loading = true;
     this.userService.query(loginName).subscribe(({ user, loading }) => {
       this.loading = loading;
       this.user = user;

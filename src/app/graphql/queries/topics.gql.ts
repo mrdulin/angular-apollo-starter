@@ -1,10 +1,8 @@
 import gql from 'graphql-tag';
 
-const RepoQuery = gql`
+const TOPICS = gql`
   query($owner: String!, $name: String!, $first: Int) {
     repository(owner: $owner, name: $name) {
-      id
-      name
       repositoryTopics(first: $first) {
         nodes {
           id
@@ -19,4 +17,4 @@ const RepoQuery = gql`
   }
 `;
 
-export { RepoQuery };
+export { TOPICS };
