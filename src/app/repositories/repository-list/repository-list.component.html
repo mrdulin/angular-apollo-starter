@@ -2,7 +2,7 @@
   <p *ngIf='repoLoading'>loading...</p>
   <ul *ngFor='let repo of repoes'>
     <li>
-      <a routerLink="/repo/{{repo.node.name}}">{{repo.node.name}}</a>
+      <a routerLink="/repo/{{repo.node.name}}" (mouseover)='prefetchRepo(repo.node.name)'>{{repo.node.name}}</a>
     </li>
   </ul>
   <p *ngIf='moreLoading'>load more...</p>

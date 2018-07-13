@@ -14,7 +14,9 @@ export class RepositoryListComponent implements OnInit, OnDestroy {
   moreLoading: boolean;
 
   loginName = 'mrdulin';
-  first = 1;
+  first = 3;
+
+  private prefetched = false;
 
   constructor(private repoService: RepoService) {}
 
@@ -28,6 +30,14 @@ export class RepositoryListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.repoesSub.unsubscribe();
+  }
+
+  private prefetchRepo(name: string) {
+    if (!this.prefetched) {
+      console.log('prefetchRepo');
+      this.repoService.prefetchTopics(this.loginName, name, 10);
+      this.prefetched = true;
+    }
   }
 
   private onLoadMore() {

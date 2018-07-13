@@ -68,7 +68,7 @@ export class RepoService {
     });
   }
 
-  public getRepoByNameAndOwner(owner: string, name: string, first?: number): Observable<any> {
+  public getTopics(owner: string, name: string, first?: number): Observable<any> {
     this.repoQueryVariables = {
       owner,
       name,
@@ -83,6 +83,10 @@ export class RepoService {
         const { data, ...rest } = res;
         return { repository: data.repository, ...rest };
       });
+  }
+
+  public prefetchTopics(owner: string, name: string, first?: number) {
+    this.apollo.query({ query: Q.TOPICS, variables: { owner, name, first } }).subscribe();
   }
 
   public updateTopics(updateTopicsInput: IUpdateTopicsInput): Observable<any> {

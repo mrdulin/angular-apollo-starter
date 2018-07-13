@@ -31,7 +31,7 @@ export class RepositoryComponent implements OnInit, OnDestroy {
     const name: string = this.route.snapshot.paramMap.get('name');
     const owner = 'mrdulin';
     this.repo.name = name;
-    this.repo$ = this.repoService.getRepoByNameAndOwner(owner, name, 10);
+    this.repo$ = this.repoService.getTopics(owner, name, 10);
     this.repoSubscription = this.repo$.subscribe((data: any) => {
       this.repo = data.repository;
       console.log('this.repo: ', this.repo);
