@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
+import { Apollo, QueryRef } from 'apollo-angular';
 import { FetchResult } from 'apollo-link';
 import findIndex from 'core-js/library/fn/array/find-index';
 
 import { RepoQuery } from './repo.gql';
 import { Observable } from 'rxjs';
 
+import * as Q from '../graphql/queries';
 import * as M from '../graphql/mutations';
 import { DataProxy } from 'apollo-cache';
 
@@ -17,9 +18,56 @@ interface IUpdateTopicsInput {
 
 @Injectable()
 export class RepoService {
+  repoQuery: QueryRef<any>;
+
   constructor(private apollo: Apollo) {}
 
   private repoQueryVariables: any;
+
+  public getRepoes(login: string, first: number): Observable<any> {
+    this.repoQuery = this.apollo.watchQuery<any>({
+      query: Q.repoes,
+      variables: {
+        login,
+        first
+      }
+    });
+    return this.repoQuery.valueChanges.map(res => {
+      const { data, ...rest } = res;
+      return {
+        repoes: data.user.repositories,
+        ...rest
+      };
+    });
+  }
+
+  public getRepoesMore(login: string, first: number, after: string): Promise<any> {
+    return this.repoQuery.fetchMore({
+      variables: {
+        login,
+        first,
+        after
+      },
+      updateQuery: (previousQueryResult, { fetchMoreResult, variables }) => {
+        if (!fetchMoreResult) {
+          return previousQueryResult;
+        }
+        const prevEdges = previousQueryResult.user.repositories.edges;
+        const edges = fetchMoreResult.user.repositories.edges;
+        const nextEdges = [...prevEdges, ...edges];
+
+        const nextResult = Object.assign({}, previousQueryResult, {
+          user: Object.assign({}, previousQueryResult.user, {
+            repositories: Object.assign({}, previousQueryResult.user.repositories, {
+              edges: nextEdges
+            })
+          })
+        });
+
+        return nextResult;
+      }
+    });
+  }
 
   public getRepoByNameAndOwner(owner: string, name: string, first?: number): Observable<any> {
     this.repoQueryVariables = {
@@ -51,7 +99,7 @@ export class RepoService {
         if (!updateTopics.invalidTopicNames) {
           let nextNodes: any[];
           const data: any = proxy.readQuery({ query: RepoQuery, variables: this.repoQueryVariables });
-          console.log('updateTopicsInput.topicNames: ', updateTopicsInput.topicNames);
+          // console.log('updateTopicsInput.topicNames: ', updateTopicsInput.topicNames);
 
           const {
             repository: { repositoryTopics }
@@ -85,7 +133,7 @@ export class RepoService {
             });
           }
 
-          console.log('nextNodes: ', nextNodes);
+          // console.log('nextNodes: ', nextNodes);
 
           repositoryTopics.nodes = nextNodes;
 

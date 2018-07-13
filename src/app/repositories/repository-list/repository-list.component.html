@@ -1,7 +1,8 @@
 <section>
-  <ul *ngFor='let repo of repos'>
+  <ul *ngFor='let repo of repoes'>
     <li>
-      <a routerLink="/repo/{{repo.name}}">{{repo.name}}</a>
+      <a routerLink="/repo/{{repo.node.name}}">{{repo.node.name}}</a>
     </li>
   </ul>
+  <button type='button' (click)="onLoadMore()">loadmore</button>
 </section>

@@ -4,7 +4,7 @@ import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs';
 
 import 'rxjs/add/operator/map';
-import { userQuery } from '../core/user.gql';
+import * as Q from '../graphql/queries';
 
 @Injectable()
 export class UserService {
@@ -13,11 +13,8 @@ export class UserService {
   public query(login: string): Observable<any> {
     return this.apollo
       .watchQuery<any>({
-        query: userQuery,
-        variables: {
-          login,
-          first: 10
-        }
+        query: Q.user,
+        variables: { login }
       })
       .valueChanges.map(res => {
         const { data, ...rest } = res;
@@ -26,11 +23,5 @@ export class UserService {
           ...rest
         };
       });
-  }
-
-  public getRepos(login: string): Observable<any[]> {
-    return this.query(login).map(data => {
-      return data.user.repositories;
-    });
   }
 }
