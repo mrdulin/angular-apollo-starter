@@ -42,13 +42,13 @@ export class RepositoryComponent implements OnInit, OnDestroy {
     this.repoSubscription.unsubscribe();
   }
 
-  private onEditTopics() {
+  public onEditTopics() {
     console.log('onEditTopics');
     this.topicEditing = true;
     this.topicsString = this.repo.repositoryTopics.nodes.map(node => node.topic.name);
   }
 
-  private onEditTopicsDone(newTopicsString: string) {
+  public onEditTopicsDone(newTopicsString: string) {
     console.log('onEditTopicsDone');
     this.topicEditing = false;
     // TODO: mutation
@@ -72,7 +72,7 @@ export class RepositoryComponent implements OnInit, OnDestroy {
       );
   }
 
-  private onEditTopicsEnter(newTopicsString: string) {
+  public onEditTopicsEnter(newTopicsString: string) {
     console.log('newTopicsString: ', newTopicsString);
     // TODO: update view
   }

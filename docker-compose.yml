@@ -1,0 +1,11 @@
+version: '2.1'
+
+services:
+  angular-apollo-starter:
+    image: angular-apollo-starter
+    build: .
+    environment:
+      NODE_ENV: production
+    env_file: .env
+    ports:
+      - 8080:80

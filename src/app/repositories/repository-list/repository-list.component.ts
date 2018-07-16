@@ -32,7 +32,7 @@ export class RepositoryListComponent implements OnInit, OnDestroy {
     this.repoesSub.unsubscribe();
   }
 
-  private prefetchRepo(name: string) {
+  public prefetchRepo(name: string) {
     if (!this.prefetched) {
       console.log('prefetchRepo');
       this.repoService.prefetchTopics(this.loginName, name, 10);
@@ -40,7 +40,7 @@ export class RepositoryListComponent implements OnInit, OnDestroy {
     }
   }
 
-  private onLoadMore() {
+  public onLoadMore() {
     console.log('onLoadMore');
     const lastRepo = this.repoes[this.repoes.length - 1];
     const after: string = lastRepo.cursor;

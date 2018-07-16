@@ -38,7 +38,7 @@ import { FollowersComponent } from './followers/followers.component';
 export class AppModule {
   constructor(apollo: Apollo, httpLink: HttpLink) {
     const auth = setContext((operation: GraphQLRequest, prevContext: any) => {
-      const jwt: string = localStorage.getItem('jwt') || '2b870df2f85741bcbae8644b32099a10828dbbbe';
+      const jwt: string = localStorage.getItem('jwt') || process.env.GITHUB_ACCESS_TOKEN;
 
       if (!jwt) {
         return {};
@@ -50,7 +50,7 @@ export class AppModule {
     });
 
     const http = httpLink.create({
-      uri: 'https://api.github.com/graphql'
+      uri: process.env.GITHUB_GRAPHQL_API_ENDPOINT
     });
 
     apollo.create({
