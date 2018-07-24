@@ -5,7 +5,10 @@ import { ApolloModule, Apollo } from 'apollo-angular';
 import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { setContext } from 'apollo-link-context';
-import { GraphQLRequest } from 'apollo-link';
+import { GraphQLRequest, split, from } from 'apollo-link';
+import { createUploadLink } from 'apollo-upload-client';
+
+import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 
@@ -19,9 +22,10 @@ import { CoreModule } from './core/core.module';
 import { RepositoriesModule } from './repositories/repositories.module';
 
 import { FollowersComponent } from './followers/followers.component';
+import { UploadComponent } from './upload/upload.component';
 
 @NgModule({
-  declarations: [AppComponent, FollowersComponent],
+  declarations: [AppComponent, FollowersComponent, UploadComponent],
   imports: [
     BrowserModule,
     CoreModule,
@@ -29,8 +33,8 @@ import { FollowersComponent } from './followers/followers.component';
     HttpClientModule,
     ApolloModule,
     HttpLinkModule,
-    SharedModule,
-    RepositoriesModule
+    RepositoriesModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
@@ -38,7 +42,7 @@ import { FollowersComponent } from './followers/followers.component';
 export class AppModule {
   constructor(apollo: Apollo, httpLink: HttpLink) {
     const auth = setContext((operation: GraphQLRequest, prevContext: any) => {
-      const jwt: string = localStorage.getItem('jwt') || process.env.GITHUB_ACCESS_TOKEN;
+      const jwt: string = localStorage.getItem('jwt') || '';
 
       if (!jwt) {
         return {};
@@ -49,12 +53,21 @@ export class AppModule {
       }
     });
 
+    const uploadLink = createUploadLink({ uri: 'http://localhost:3000/graphql' });
+
     const http = httpLink.create({
-      uri: process.env.GITHUB_GRAPHQL_API_ENDPOINT
+      uri: environment.GITHUB_GRAPHQL_API_ENDPOINT
     });
 
+    const isFile = value =>
+      (typeof File !== 'undefined' && value instanceof File) || (typeof Blob !== 'undefined' && value instanceof Blob);
+
+    const isUpload = ({ variables }) => Object.values(variables).some(isFile);
+    const terminalLink = split(isUpload, uploadLink, http);
+
     apollo.create({
-      link: auth.concat(http),
+      // link: auth.concat(http),
+      link: from([auth, terminalLink]),
       cache: new InMemoryCache()
     });
   }

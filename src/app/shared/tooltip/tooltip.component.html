@@ -1,0 +1,8 @@
+<div class='tooltip' (mouseenter)='onMouseEnter()' (mouseleave)='onMouseLeave()'>
+  <div [hidden]='!show'>
+    <span>{{icon}}</span>
+    <span className="tooltip-text">{{text}}</span>
+  </div>
+
+  <span [hidden]='show'>{{label}}</span>
+</div>
