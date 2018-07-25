@@ -53,10 +53,10 @@ export class AppModule {
       }
     });
 
-    const uploadLink = createUploadLink({ uri: 'http://localhost:3000/graphql' });
+    const uploadLink = createUploadLink({ uri: environment.UPLOAD_API_ENDPOINT });
 
     const http = httpLink.create({
-      uri: environment.GITHUB_GRAPHQL_API_ENDPOINT
+      uri: environment.UPLOAD_API_ENDPOINT || environment.GITHUB_GRAPHQL_API_ENDPOINT
     });
 
     const isFile = value =>

@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  GITHUB_GRAPHQL_API_ENDPOINT: 'https://api.github.com/graphql'
+  GITHUB_GRAPHQL_API_ENDPOINT: 'https://api.github.com/graphql',
+  UPLOAD_API_ENDPOINT: 'http://localhost:4000/graphql'
 };
 
 /*

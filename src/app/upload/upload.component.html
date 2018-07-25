@@ -1,4 +1,23 @@
 <div>
   <h2>upload</h2>
   <app-file-upload></app-file-upload>
+
+  <p *ngIf='loading'>loading...</p>
+  <section *ngIf='!loading'>
+    <table>
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>filename</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor='let file of uploads'>
+          <td>{{file.id}}</td>
+          <td>{{file.filename}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
 </div>
