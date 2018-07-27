@@ -13,12 +13,15 @@ import * as Q from '../graphql/queries';
 export class FileUploadService {
   constructor(private apollo: Apollo) {}
 
-  public upload(file: File): Observable<FetchResult> {
+  public upload(files: FileList): Observable<FetchResult> {
+    if (files.length > 1) {
+      return this.mutipleUpload(files);
+    }
     return this.apollo
       .mutate({
         mutation: M.SINGLE_UPLOAD,
         variables: {
-          file
+          file: files[0]
         },
         update: (proxy: DataProxy, mutationResult: FetchResult<any>) => {
           const data: any = proxy.readQuery({ query: Q.UPLOADS });
@@ -28,6 +31,27 @@ export class FileUploadService {
           data.uploads.push(newUpload);
           proxy.writeQuery({ query: Q.UPLOADS, data });
         }
+      })
+      .map(res => {
+        return res;
+      });
+  }
+
+  public mutipleUpload(files: FileList): Observable<FetchResult> {
+    return this.apollo
+      .mutate({
+        mutation: M.MULTIPLE_UPLOAD,
+        variables: {
+          files
+        }
+        // update: (proxy: DataProxy, mutationResult: FetchResult<any>) => {
+        //   const data: any = proxy.readQuery({ query: Q.UPLOADS });
+        //   const {
+        //     data: { singleUpload: newUpload }
+        //   } = mutationResult;
+        //   data.uploads.push(newUpload);
+        //   proxy.writeQuery({ query: Q.UPLOADS, data });
+        // }
       })
       .map(res => {
         return res;

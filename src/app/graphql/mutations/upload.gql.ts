@@ -9,4 +9,13 @@ const SINGLE_UPLOAD = gql`
   }
 `;
 
-export { SINGLE_UPLOAD };
+const MULTIPLE_UPLOAD = gql`
+  mutation multipleUpload($files: [Upload!]!) {
+    multipleUpload(files: $files) {
+      id
+      filename
+    }
+  }
+`;
+
+export { SINGLE_UPLOAD, MULTIPLE_UPLOAD };

@@ -8,13 +8,15 @@ import { FileUploadService } from '../../core/file-upload.service';
 export class FileUploadComponent {
   constructor(private fileUploadService: FileUploadService) {}
 
-  onChange(files: FileList) {
-    const file = files[0];
-    this.upload(file);
+  onChange(evt) {
+    const { files, validity } = evt.target;
+    if (validity.valid) {
+      this.upload(files);
+    }
   }
 
-  private upload(file) {
-    this.fileUploadService.upload(file).subscribe(
+  private upload(files: FileList) {
+    this.fileUploadService.upload(files).subscribe(
       data => {
         console.log('upload successfully');
       },
