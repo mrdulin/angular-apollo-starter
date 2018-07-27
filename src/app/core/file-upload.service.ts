@@ -42,6 +42,7 @@ export class FileUploadService {
       .mutate({
         mutation: M.MULTIPLE_UPLOAD,
         variables: {
+          text: '123',
           files
         }
         // update: (proxy: DataProxy, mutationResult: FetchResult<any>) => {

@@ -10,8 +10,8 @@ const SINGLE_UPLOAD = gql`
 `;
 
 const MULTIPLE_UPLOAD = gql`
-  mutation multipleUpload($files: [Upload!]!) {
-    multipleUpload(files: $files) {
+  mutation multipleUpload($text: String, $files: [Upload!]!) {
+    multipleUpload(text: $text, files: $files) {
       id
       filename
     }
