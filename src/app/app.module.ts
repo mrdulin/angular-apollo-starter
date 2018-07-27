@@ -42,7 +42,7 @@ import { UploadComponent } from './upload/upload.component';
 export class AppModule {
   constructor(apollo: Apollo, httpLink: HttpLink) {
     const auth = setContext((operation: GraphQLRequest, prevContext: any) => {
-      const jwt: string = localStorage.getItem('jwt') || '';
+      const jwt: string = localStorage.getItem('jwt') || 'default token';
 
       if (!jwt) {
         return {};
