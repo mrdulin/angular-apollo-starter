@@ -15,7 +15,9 @@ export class FileUploadService {
 
   public upload(files: FileList): Observable<FetchResult> {
     if (files.length > 1) {
-      return this.mutipleUpload(files);
+      const fileArray = Array.from(files);
+      // return this.mutipleUpload(files);
+      return this.multipleUpload(fileArray);
     }
     return this.apollo
       .mutate({
@@ -37,22 +39,22 @@ export class FileUploadService {
       });
   }
 
-  public mutipleUpload(files: FileList): Observable<FetchResult> {
+  public multipleUpload(files: FileList | File[]): Observable<FetchResult> {
     return this.apollo
       .mutate({
         mutation: M.MULTIPLE_UPLOAD,
         variables: {
           text: '123',
           files
+        },
+        update: (proxy: DataProxy, mutationResult: FetchResult<any>) => {
+          const data: any = proxy.readQuery({ query: Q.UPLOADS });
+          const {
+            data: { multipleUpload: newUploads }
+          } = mutationResult;
+          data.uploads = data.uploads.concat(newUploads);
+          proxy.writeQuery({ query: Q.UPLOADS, data });
         }
-        // update: (proxy: DataProxy, mutationResult: FetchResult<any>) => {
-        //   const data: any = proxy.readQuery({ query: Q.UPLOADS });
-        //   const {
-        //     data: { singleUpload: newUpload }
-        //   } = mutationResult;
-        //   data.uploads.push(newUpload);
-        //   proxy.writeQuery({ query: Q.UPLOADS, data });
-        // }
       })
       .map(res => {
         return res;

@@ -55,21 +55,21 @@ export class AppModule {
 
     const uploadLink = createUploadLink({ uri: environment.UPLOAD_API_ENDPOINT });
 
-    const http = httpLink.create({
-      uri: environment.UPLOAD_API_ENDPOINT || environment.GITHUB_GRAPHQL_API_ENDPOINT
-    });
+    // No need for file upload??
+    // const http = httpLink.create({
+    //   uri: environment.UPLOAD_API_ENDPOINT || environment.GITHUB_GRAPHQL_API_ENDPOINT
+    // });
 
-    const isFile = value =>
-      (typeof File !== 'undefined' && value instanceof File) ||
-      (typeof Blob !== 'undefined' && value instanceof Blob) ||
-      (typeof FileList !== 'undefined' && value instanceof FileList);
+    // const isFile = value =>
+    //   (typeof File !== 'undefined' && value instanceof File) ||
+    //   (typeof Blob !== 'undefined' && value instanceof Blob) ||
+    //   (typeof FileList !== 'undefined' && value instanceof FileList);
 
-    const isUpload = ({ variables }) => Object.values(variables).some(isFile);
-    const terminalLink = split(isUpload, uploadLink, http);
+    // const isUpload = ({ variables }) => Object.values(variables).some(isFile);
+    // const terminalLink = split(isUpload, uploadLink, http);
 
     apollo.create({
-      // link: auth.concat(http),
-      link: from([auth, terminalLink]),
+      link: from([auth, uploadLink]),
       cache: new InMemoryCache()
     });
   }
