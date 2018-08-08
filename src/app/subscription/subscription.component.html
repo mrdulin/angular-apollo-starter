@@ -1,0 +1,9 @@
+<section>
+  <button type="button" (click)='create()'>create</button>
+
+  <ul>
+    <li *ngFor="let comment of comments; trackBy:comment?.id">
+      {{comment.content}}
+    </li>
+  </ul>
+</section>

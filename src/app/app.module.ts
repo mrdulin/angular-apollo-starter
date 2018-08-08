@@ -7,6 +7,11 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { setContext } from 'apollo-link-context';
 import { GraphQLRequest, split, from } from 'apollo-link';
 import { createUploadLink } from 'apollo-upload-client';
+import { onError } from 'apollo-link-error';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { WebSocketLink } from 'apollo-link-ws';
+import { getMainDefinition } from 'apollo-utilities';
+import { OperationDefinitionNode, FragmentDefinitionNode } from 'graphql';
 
 import { environment } from '../environments/environment';
 
@@ -23,9 +28,10 @@ import { RepositoriesModule } from './repositories/repositories.module';
 
 import { FollowersComponent } from './followers/followers.component';
 import { UploadComponent } from './upload/upload.component';
+import { SubscriptionComponent } from './subscription/subscription.component';
 
 @NgModule({
-  declarations: [AppComponent, FollowersComponent, UploadComponent],
+  declarations: [AppComponent, FollowersComponent, UploadComponent, SubscriptionComponent],
   imports: [
     BrowserModule,
     CoreModule,
@@ -53,8 +59,54 @@ export class AppModule {
       }
     });
 
-    const uploadLink = createUploadLink({ uri: environment.UPLOAD_API_ENDPOINT });
+    const UPLOAD_URI = `http://${environment.HOST}:${environment.PORT}${environment.GRAPHQL_PATH}`;
+    const uploadLink = createUploadLink({ uri: UPLOAD_URI });
 
+    const errorLink = onError(({ graphQLErrors, networkError, operation, forward, response }) => {
+      if (graphQLErrors) {
+        graphQLErrors.map(({ message, locations, path }) =>
+          console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
+        );
+      }
+
+      if (networkError) {
+        console.log(`[Network error]: ${networkError}`);
+      }
+    });
+
+    const WS_URI = `ws://${environment.HOST}:${environment.PORT}${environment.WS_PATH}`;
+    const subscriptionClient = new SubscriptionClient(WS_URI, {
+      connectionParams: {},
+      reconnect: true,
+      reconnectionAttempts: 5,
+      connectionCallback: (error: Error[]) => {
+        if (error) {
+          console.log(error);
+        }
+        console.log('connectionCallback');
+      },
+      inactivityTimeout: 60 * 1000
+    });
+
+    subscriptionClient.onConnecting(() => {
+      console.log('ws connecting');
+    });
+    subscriptionClient.onConnected(() => {
+      console.log('ws connected');
+    });
+    subscriptionClient.onReconnecting(() => {
+      console.log('ws reconnecting');
+    });
+    subscriptionClient.onReconnected(() => {
+      console.log('ws reconnected');
+    });
+    subscriptionClient.onDisconnected(() => {
+      console.log('ws disconnected');
+    });
+    subscriptionClient.onError(() => {
+      console.log('ws error');
+    });
+    const wsLink = new WebSocketLink(subscriptionClient);
     // No need for file upload??
     // const http = httpLink.create({
     //   uri: environment.UPLOAD_API_ENDPOINT || environment.GITHUB_GRAPHQL_API_ENDPOINT
@@ -68,8 +120,17 @@ export class AppModule {
     // const isUpload = ({ variables }) => Object.values(variables).some(isFile);
     // const terminalLink = split(isUpload, uploadLink, http);
 
+    const networkLink = split(
+      ({ query }) => {
+        const { kind, operation } = getMainDefinition(query);
+        return kind === 'OperationDefinition' && operation === 'subscription';
+      },
+      wsLink,
+      uploadLink
+    );
+
     apollo.create({
-      link: from([auth, uploadLink]),
+      link: from([auth, errorLink, networkLink]),
       cache: new InMemoryCache()
     });
   }

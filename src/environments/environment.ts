@@ -5,7 +5,11 @@
 export const environment = {
   production: false,
   GITHUB_GRAPHQL_API_ENDPOINT: 'https://api.github.com/graphql',
-  UPLOAD_API_ENDPOINT: 'http://localhost:4000/graphql'
+
+  HOST: 'localhost',
+  PORT: 4000,
+  WS_PATH: '/subscriptions',
+  GRAPHQL_PATH: '/graphql'
 };
 
 /*

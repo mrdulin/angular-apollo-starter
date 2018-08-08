@@ -25,6 +25,8 @@
     "apollo-cache-inmemory": "^1.2.5",
     "apollo-client": "^2.3.5",
     "apollo-link-context": "^1.0.8",
+    "apollo-link-error": "^1.1.0",
+    "apollo-link-ws": "^1.0.8",
     "apollo-upload-client": "^8.1.0",
     "core-js": "^2.5.4",
     "dotenv": "^6.0.0",
@@ -32,6 +34,7 @@
     "graphql-tag": "^2.9.2",
     "rxjs": "^6.0.0",
     "rxjs-compat": "^6.2.1",
+    "subscriptions-transport-ws": "^0.9.14",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
