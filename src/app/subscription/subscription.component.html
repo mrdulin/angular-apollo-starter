@@ -1,9 +1,19 @@
 <section>
   <button type="button" (click)='create()'>create</button>
+  <button type="button" (click)='refreshToken()'>refreshToken</button>
+  <button type='button' (click)='deleteAll()'>deleteAll</button>
 
-  <ul>
-    <li *ngFor="let comment of comments; trackBy:comment?.id">
-      {{comment.content}}
-    </li>
-  </ul>
+  <table>
+    <thead>
+      <th>id</th>
+      <th>content</th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let comment of comments; trackBy:comment?.id">
+        <td>{{comment.id}}</td>
+        <td>{{comment.content}}</td>
+      </tr>
+    </tbody>
+  </table>
+
 </section>

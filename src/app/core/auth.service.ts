@@ -10,9 +10,14 @@ export class AuthService {
   public refreshJwt() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        const jwt = Math.random();
+        const jwt = Math.random().toString();
+        this.setJwt(jwt);
         resolve(jwt);
       }, 1000);
     });
+  }
+
+  public setJwt(jwt: string) {
+    localStorage.setItem('jwt', jwt);
   }
 }

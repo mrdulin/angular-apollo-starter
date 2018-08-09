@@ -8,8 +8,9 @@ import { OperationDefinitionNode } from 'graphql';
 
 import { environment } from '../../environments/environment';
 import { AuthService } from '../core/auth.service';
+import { SubscriptionService } from '../core/subscription.service';
 import { WebSocketLink } from 'apollo-link-ws';
-import { errorLink, uploadLink, createSubscribeClient, authLink } from '../graphql/middlewares';
+import { errorLink, uploadLink, authLink } from '../graphql/middlewares';
 
 @NgModule({
   declarations: [],
@@ -18,11 +19,11 @@ import { errorLink, uploadLink, createSubscribeClient, authLink } from '../graph
   providers: []
 })
 export class GraphqlModule {
-  constructor(apollo: Apollo, authService: AuthService) {
+  constructor(apollo: Apollo, authService: AuthService, subscriptionService: SubscriptionService) {
     const WS_URI = `ws://${environment.HOST}:${environment.PORT}${environment.WS_PATH}`;
 
-    const wsClient = createSubscribeClient(WS_URI, {
-      lazy: true,
+    const wsClient = subscriptionService.getWSClient(WS_URI, {
+      // lazy: true,
       // When connectionParams is a function, it gets evaluated before each connection.
       connectionParams: () => {
         return {

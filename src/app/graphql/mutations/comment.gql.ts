@@ -9,4 +9,10 @@ const CREATE_COMMENT = gql`
   }
 `;
 
-export { CREATE_COMMENT };
+const DELETE_ALL_COMMENT = gql`
+  mutation {
+    deleteAllComment
+  }
+`;
+
+export { CREATE_COMMENT, DELETE_ALL_COMMENT };

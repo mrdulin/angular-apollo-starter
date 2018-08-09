@@ -19,6 +19,13 @@ export class CommentService {
     return this.commentRef.valueChanges;
   }
 
+  public deleteAll() {
+    return this.apollo.mutate({
+      mutation: M.DELETE_ALL_COMMENT,
+      update: (proxy: DataProxy, mutationResult: FetchResult<any>) => {}
+    });
+  }
+
   public create(content: string) {
     return this.apollo.mutate({
       mutation: M.CREATE_COMMENT,
