@@ -11,7 +11,7 @@ import { onError } from 'apollo-link-error';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
-import { OperationDefinitionNode, FragmentDefinitionNode } from 'graphql';
+import { OperationDefinitionNode } from 'graphql';
 
 import { environment } from '../environments/environment';
 
@@ -29,6 +29,7 @@ import { RepositoriesModule } from './repositories/repositories.module';
 import { FollowersComponent } from './followers/followers.component';
 import { UploadComponent } from './upload/upload.component';
 import { SubscriptionComponent } from './subscription/subscription.component';
+import { AuthService } from './core/auth.service';
 
 @NgModule({
   declarations: [AppComponent, FollowersComponent, UploadComponent, SubscriptionComponent],
@@ -46,7 +47,7 @@ import { SubscriptionComponent } from './subscription/subscription.component';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(apollo: Apollo, httpLink: HttpLink) {
+  constructor(apollo: Apollo, httpLink: HttpLink, authService: AuthService) {
     const auth = setContext((operation: GraphQLRequest, prevContext: any) => {
       const jwt: string = localStorage.getItem('jwt') || 'default token';
 
@@ -76,9 +77,15 @@ export class AppModule {
 
     const WS_URI = `ws://${environment.HOST}:${environment.PORT}${environment.WS_PATH}`;
     const subscriptionClient = new SubscriptionClient(WS_URI, {
-      connectionParams: {},
+      lazy: true,
+      // When connectionParams is a function, it gets evaluated before each connection.
+      connectionParams: () => {
+        return {
+          token: authService.getJwt()
+        };
+      },
       reconnect: true,
-      reconnectionAttempts: 5,
+      reconnectionAttempts: 60,
       connectionCallback: (error: Error[]) => {
         if (error) {
           console.log(error);
@@ -122,7 +129,7 @@ export class AppModule {
 
     const networkLink = split(
       ({ query }) => {
-        const { kind, operation } = getMainDefinition(query);
+        const { kind, operation } = getMainDefinition(query) as OperationDefinitionNode;
         return kind === 'OperationDefinition' && operation === 'subscription';
       },
       wsLink,
