@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 import { AuthService } from '../core/auth.service';
 import { SubscriptionService } from '../core/subscription.service';
 import { WebSocketLink } from 'apollo-link-ws';
-import { errorLink, uploadLink, authLink } from '../graphql/middlewares';
+import { errorLink, uploadLink, createAuthLink } from '../graphql/middlewares';
 
 @NgModule({
   declarations: [],
@@ -27,7 +27,7 @@ export class GraphqlModule {
       // When connectionParams is a function, it gets evaluated before each connection.
       connectionParams: () => {
         return {
-          token: authService.getJwt()
+          token: `Bearer ${authService.getJwt()}`
         };
       },
       reconnect: true,
@@ -51,6 +51,8 @@ export class GraphqlModule {
       wsLink,
       uploadLink
     );
+
+    const authLink = createAuthLink(authService);
 
     apollo.create({
       link: from([authLink, errorLink, networkLink]),

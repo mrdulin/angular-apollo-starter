@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class AuthService {
   public getJwt() {
     const jwt: string = localStorage.getItem('jwt') || '';
-    return `Bearer ${jwt}`;
+    return jwt;
   }
 
   public refreshJwt() {
@@ -19,5 +19,10 @@ export class AuthService {
 
   public setJwt(jwt: string) {
     localStorage.setItem('jwt', jwt);
+  }
+
+  public setJwtByUserType(type: string) {
+    const jwt = type;
+    this.setJwt(jwt);
   }
 }

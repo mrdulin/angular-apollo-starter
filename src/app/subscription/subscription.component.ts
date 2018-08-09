@@ -18,6 +18,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
   getAllSub: Subscription;
   addCommentSub: Subscription;
+  user: string;
 
   wsc: SubscriptionClient;
 
@@ -31,6 +32,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.user = this.authService.getJwt();
     this.getAllSub = this.commentService.getAll().subscribe({
       next: ({ data, loading }) => {
         this.getAllLoading = loading;
@@ -79,5 +81,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     this.commentService.deleteAll().subscribe({
       next: res => console.log('delete all: ', res)
     });
+  }
+
+  switchUser(userType: string) {
+    this.user = userType;
+    this.wsc.close(false, false);
+    this.authService.setJwtByUserType(userType);
   }
 }

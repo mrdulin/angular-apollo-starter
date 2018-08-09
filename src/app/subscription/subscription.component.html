@@ -2,6 +2,10 @@
   <button type="button" (click)='create()'>create</button>
   <button type="button" (click)='refreshToken()'>refreshToken</button>
   <button type='button' (click)='deleteAll()'>deleteAll</button>
+  <button type='button' (click)='switchUser("ZELO")'>ZELO user</button>
+  <button type='button' (click)='switchUser("ZEWI")'>ZEWI user</button>
+
+  <p>current user: {{user}}</p>
 
   <table>
     <thead>

@@ -1,16 +1,21 @@
 import { setContext } from 'apollo-link-context';
 import { GraphQLRequest } from 'apollo-link';
 
-const authLink = setContext((operation: GraphQLRequest, prevContext: any) => {
-  const jwt: string = localStorage.getItem('jwt') || 'default token';
+import { AuthService } from '../../core/auth.service';
 
-  if (!jwt) {
-    return {};
-  } else {
-    return {
-      headers: { Authorization: `Bearer ${jwt}` }
-    };
-  }
-});
+function createAuthLink(authService: AuthService) {
+  const authLink = setContext((operation: GraphQLRequest, prevContext: any) => {
+    const jwt: string = authService.getJwt();
 
-export { authLink };
+    if (!jwt) {
+      return {};
+    } else {
+      return {
+        headers: { Authorization: `Bearer ${jwt}` }
+      };
+    }
+  });
+  return authLink;
+}
+
+export { createAuthLink };
