@@ -6,4 +6,13 @@ export class AuthService {
     const jwt: string = localStorage.getItem('jwt') || '';
     return `Bearer ${jwt}`;
   }
+
+  public refreshJwt() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const jwt = Math.random();
+        resolve(jwt);
+      }, 1000);
+    });
+  }
 }
