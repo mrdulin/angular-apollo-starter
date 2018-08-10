@@ -23,7 +23,7 @@ export class GraphqlModule {
     const WS_URI = `ws://${environment.HOST}:${environment.PORT}${environment.WS_PATH}`;
 
     const wsClient = subscriptionService.getWSClient(WS_URI, {
-      // lazy: true,
+      lazy: true,
       // When connectionParams is a function, it gets evaluated before each connection.
       connectionParams: () => {
         return {
@@ -31,14 +31,15 @@ export class GraphqlModule {
         };
       },
       reconnect: true,
-      reconnectionAttempts: 60,
+      reconnectionAttempts: 5,
       connectionCallback: (error: Error[]) => {
         if (error) {
           console.log(error);
         }
+
         console.log('connectionCallback');
       },
-      inactivityTimeout: 60 * 1000
+      inactivityTimeout: 1000
     });
 
     const wsLink = new WebSocketLink(wsClient);

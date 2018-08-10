@@ -42,6 +42,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
       complete: () => {}
     });
 
+    this.subscribe();
+
     this.wsc.onReconnected(this.subscribe);
     this.wsc.onConnected(this.subscribe);
   }
@@ -87,5 +89,13 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     this.user = userType;
     this.wsc.close(false, false);
     this.authService.setJwtByUserType(userType);
+
+    // https://github.com/apollographql/subscriptions-transport-ws/issues/171
+    (<any>this.wsc).connect();
+  }
+
+  logout() {
+    this.user = null;
+    this.authService.clear();
   }
 }

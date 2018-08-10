@@ -20,6 +20,12 @@ export class SubscriptionService {
     return this.wsc;
   }
 
+  public close() {
+    if (this.wsc) {
+      this.wsc.close();
+    }
+  }
+
   private bindEvent() {
     this.wsc.onConnecting(() => {
       console.log('ws connecting');

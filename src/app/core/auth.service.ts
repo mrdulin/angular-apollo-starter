@@ -25,4 +25,8 @@ export class AuthService {
     const jwt = type;
     this.setJwt(jwt);
   }
+
+  public clear() {
+    localStorage.removeItem('jwt');
+  }
 }
