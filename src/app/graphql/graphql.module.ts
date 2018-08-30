@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { ApolloModule, Apollo } from 'apollo-angular';
-import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
+import { HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { GraphQLRequest, split, from } from 'apollo-link';
+import { split, from } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 import { OperationDefinitionNode } from 'graphql';
 
