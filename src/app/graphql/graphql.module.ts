@@ -20,7 +20,7 @@ import { errorLink, uploadLink, createAuthLink } from '../graphql/middlewares';
 })
 export class GraphqlModule {
   constructor(apollo: Apollo, authService: AuthService, subscriptionService: SubscriptionService) {
-    const WS_URI = `ws://${environment.HOST}:${environment.PORT}${environment.WS_PATH}`;
+    const WS_URI = `wss://${environment.HOST}:${environment.PORT}${environment.WS_PATH}`;
 
     const wsClient = subscriptionService.getWSClient(WS_URI, {
       lazy: true,
