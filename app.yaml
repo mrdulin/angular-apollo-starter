@@ -1,0 +1,10 @@
+runtime: nodejs8
+service: angular-apollo-starter
+env_variables:
+  NODE_ENV: production
+handlers:
+  - url: /
+    static_files: dist/angular-apollo-starter/index.html
+    upload: dist/angular-apollo-starter/index.html
+  - url: /
+    static_dir: dist/angular-apollo-starter

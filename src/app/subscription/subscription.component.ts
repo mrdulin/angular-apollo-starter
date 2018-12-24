@@ -12,6 +12,7 @@ import { AuthService } from '../core/auth.service';
 })
 export class SubscriptionComponent implements OnInit, OnDestroy {
   comments: any[] = [];
+  comment: any = {};
 
   getAllLoading: Boolean = true;
   getAllError: Error;
@@ -52,11 +53,13 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     if (this.addCommentSub) {
       this.addCommentSub.unsubscribe();
     }
-    this.addCommentSub = this.commentService.subscribe().subscribe(({ data: { addComment } }) => {
-      if (addComment) {
-        this.comments = this.comments.concat(addComment);
-      }
-    });
+    this.addCommentSub = this.commentService
+      .subscribe()
+      .subscribe(({ data: { addComment } }) => {
+        if (addComment) {
+          this.comments = this.comments.concat(addComment);
+        }
+      });
   }
 
   ngOnDestroy(): void {
