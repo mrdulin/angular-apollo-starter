@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "predeploy": "npm run lint && npm run build -- --prod --aot && npm version patch",
-    "deploy": "gcloud app deply"
+    "deploy": "gcloud app deploy"
   },
   "private": true,
   "dependencies": {
