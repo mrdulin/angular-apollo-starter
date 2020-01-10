@@ -2,6 +2,7 @@ runtime: nodejs8
 service: angular-apollo-starter
 env_variables:
   NODE_ENV: production
+  GRAPHQL_API_DOMAIN: www.domain.com/graphql
 handlers:
   - url: /
     static_files: dist/angular-apollo-starter/index.html

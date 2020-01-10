@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { FetchResult } from 'apollo-link';
-import findIndex from 'core-js/library/fn/array/find-index';
+import { findIndex } from 'core-js/stable/function/virtual';
 
 import { Observable } from 'rxjs';
 
@@ -28,14 +28,14 @@ export class RepoService {
       query: Q.REPOES,
       variables: {
         login,
-        first
-      }
+        first,
+      },
     });
-    return this.repoQuery.valueChanges.map(res => {
+    return this.repoQuery.valueChanges.map((res) => {
       const { data, ...rest } = res;
       return {
         repoes: data.user.repositories,
-        ...rest
+        ...rest,
       };
     });
   }
@@ -45,7 +45,7 @@ export class RepoService {
       variables: {
         login,
         first,
-        after
+        after,
       },
       updateQuery: (previousQueryResult, { fetchMoreResult, variables }) => {
         if (!fetchMoreResult) {
@@ -58,13 +58,13 @@ export class RepoService {
         const nextResult = Object.assign({}, previousQueryResult, {
           user: Object.assign({}, previousQueryResult.user, {
             repositories: Object.assign({}, previousQueryResult.user.repositories, {
-              edges: nextEdges
-            })
-          })
+              edges: nextEdges,
+            }),
+          }),
         });
 
         return nextResult;
-      }
+      },
     });
   }
 
@@ -72,12 +72,12 @@ export class RepoService {
     this.repoQueryVariables = {
       owner,
       name,
-      first
+      first,
     };
     return this.apollo
       .watchQuery<any>({
         query: Q.TOPICS,
-        variables: this.repoQueryVariables
+        variables: this.repoQueryVariables,
       })
       .valueChanges.map((res: any) => {
         const { data, ...rest } = res;
@@ -93,11 +93,11 @@ export class RepoService {
     return this.apollo.mutate<any>({
       mutation: M.UPDATE_TOPICS,
       variables: {
-        input: updateTopicsInput
+        input: updateTopicsInput,
       },
-      update: (proxy: DataProxy, mutationResult: FetchResult<any>) => {
+      update: (proxy: DataProxy, mutationResult: FetchResult) => {
         const {
-          data: { updateTopics }
+          data: { updateTopics },
         } = mutationResult;
         if (!updateTopics.invalidTopicNames) {
           let nextNodes: any[];
@@ -105,20 +105,20 @@ export class RepoService {
           // console.log('updateTopicsInput.topicNames: ', updateTopicsInput.topicNames);
 
           const {
-            repository: { repositoryTopics }
+            repository: { repositoryTopics },
           } = data;
 
           if (repositoryTopics.nodes.length > updateTopicsInput.topicNames.length) {
             nextNodes = repositoryTopics.nodes
-              .map(node => {
+              .map((node) => {
                 if (updateTopicsInput.topicNames.indexOf(node.topic.name) !== -1) {
                   return node;
                 }
               })
-              .filter(x => x);
+              .filter((x) => x);
           } else {
             nextNodes = updateTopicsInput.topicNames.map((topicName: string) => {
-              const idx: number = findIndex(repositoryTopics.nodes, node => node.topic.name === topicName);
+              const idx: number = findIndex(repositoryTopics.nodes, (node) => node.topic.name === topicName);
               const exist: boolean = idx !== -1;
               if (exist) {
                 return repositoryTopics.nodes[idx];
@@ -128,9 +128,9 @@ export class RepoService {
                   topic: {
                     id: Math.random().toString(),
                     name: topicName,
-                    __typename: 'Topic'
+                    __typename: 'Topic',
                   },
-                  __typename: 'RepositoryTopic'
+                  __typename: 'RepositoryTopic',
                 };
               }
             });
@@ -142,7 +142,7 @@ export class RepoService {
 
           proxy.writeQuery({ query: Q.TOPICS, variables: this.repoQueryVariables, data });
         }
-      }
+      },
     });
   }
 }

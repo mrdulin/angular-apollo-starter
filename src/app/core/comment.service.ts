@@ -22,9 +22,9 @@ export class CommentService {
   public deleteAll() {
     return this.apollo.mutate({
       mutation: M.DELETE_ALL_COMMENT,
-      update: (proxy: DataProxy, mutationResult: FetchResult<any>) => {
+      update: (proxy: DataProxy, mutationResult: FetchResult) => {
         const cache = proxy.readQuery({ query: Q.GET_ALL });
-      }
+      },
     });
   }
 
@@ -32,9 +32,9 @@ export class CommentService {
     return this.apollo.mutate({
       mutation: M.CREATE_COMMENT,
       variables: {
-        content
+        content,
       },
-      update: (proxy: DataProxy, mutationResult: FetchResult<any>) => {}
+      update: (proxy: DataProxy, mutationResult: FetchResult) => {},
     });
   }
 

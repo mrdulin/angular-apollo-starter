@@ -23,18 +23,18 @@ export class FileUploadService {
       .mutate({
         mutation: M.SINGLE_UPLOAD,
         variables: {
-          file: files[0]
+          file: files[0],
         },
-        update: (proxy: DataProxy, mutationResult: FetchResult<any>) => {
+        update: (proxy: DataProxy, mutationResult: FetchResult) => {
           const data: any = proxy.readQuery({ query: Q.UPLOADS });
           const {
-            data: { singleUpload: newUpload }
+            data: { singleUpload: newUpload },
           } = mutationResult;
           data.uploads.push(newUpload);
           proxy.writeQuery({ query: Q.UPLOADS, data });
-        }
+        },
       })
-      .map(res => {
+      .map((res) => {
         return res;
       });
   }
@@ -45,18 +45,18 @@ export class FileUploadService {
         mutation: M.MULTIPLE_UPLOAD,
         variables: {
           text: '123',
-          files
+          files,
         },
-        update: (proxy: DataProxy, mutationResult: FetchResult<any>) => {
+        update: (proxy: DataProxy, mutationResult: FetchResult) => {
           const data: any = proxy.readQuery({ query: Q.UPLOADS });
           const {
-            data: { multipleUpload: newUploads }
+            data: { multipleUpload: newUploads },
           } = mutationResult;
           data.uploads = data.uploads.concat(newUploads);
           proxy.writeQuery({ query: Q.UPLOADS, data });
-        }
+        },
       })
-      .map(res => {
+      .map((res) => {
         return res;
       });
   }

@@ -5,5 +5,6 @@ export const environment = {
   HOST: 'localhost',
   PORT: 4000,
   WS_PATH: '/subscriptions',
-  GRAPHQL_PATH: '/graphql'
+  GRAPHQL_PATH: '/graphql',
+  ...process.env
 };
