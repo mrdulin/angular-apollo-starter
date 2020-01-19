@@ -8,7 +8,7 @@ import { AuthService } from '../core/auth.service';
 
 @Component({
   selector: 'app-subscription',
-  templateUrl: './subscription.component.html'
+  templateUrl: './subscription.component.html',
 })
 export class SubscriptionComponent implements OnInit, OnDestroy {
   comments: any[] = [];
@@ -26,7 +26,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
   constructor(
     private commentService: CommentService,
     private subService: SubscriptionService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     this.wsc = this.subService.getWSClient();
     this.subscribe = this.subscribe.bind(this);
@@ -39,8 +39,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.getAllLoading = loading;
         this.comments = data.comments;
       },
-      error: err => (this.getAllError = err),
-      complete: () => {}
+      error: (err) => (this.getAllError = err),
+      complete: () => {},
     });
 
     this.subscribe();
@@ -53,13 +53,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     if (this.addCommentSub) {
       this.addCommentSub.unsubscribe();
     }
-    this.addCommentSub = this.commentService
-      .subscribe()
-      .subscribe(({ data: { addComment } }) => {
-        if (addComment) {
-          this.comments = this.comments.concat(addComment);
-        }
-      });
+    this.addCommentSub = this.commentService.subscribe().subscribe(({ data: { addComment } }: any) => {
+      if (addComment) {
+        this.comments = this.comments.concat(addComment);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -71,7 +69,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
   create() {
     const content = 'comment content';
-    this.commentService.create(content).subscribe(res => {
+    this.commentService.create(content).subscribe((res) => {
       console.log('create: ', res);
     });
   }
@@ -84,7 +82,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
   deleteAll() {
     this.commentService.deleteAll().subscribe({
-      next: res => console.log('delete all: ', res)
+      next: (res) => console.log('delete all: ', res),
     });
   }
 
