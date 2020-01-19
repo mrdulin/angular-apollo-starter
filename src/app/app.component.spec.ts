@@ -1,27 +1,21 @@
-import { TestBed, async } from "@angular/core/testing";
-import { AppComponent } from "./app.component";
-describe("AppComponent", () => {
+import { TestBed, async } from '@angular/core/testing';
+import { AppComponent } from './app.component';
+import { RouterOutletStubComponent } from 'src/testing';
+import { UserService } from './core/user.service';
+
+describe('AppComponent', () => {
+  let userService: jasmine.SpyObj<UserService>;
+
   beforeEach(async(() => {
+    userService = jasmine.createSpyObj('UserService', ['query']);
     TestBed.configureTestingModule({
-      declarations: [AppComponent]
+      declarations: [AppComponent, RouterOutletStubComponent],
+      providers: [{ provide: UserService, useValue: userService }],
     }).compileComponents();
   }));
-  it("should create the app", async(() => {
+  it('should create the app', async(() => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
-  }));
-  it(`should have as title 'app'`, async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual("app");
-  }));
-  it("should render title in a h1 tag", async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector("h1").textContent).toContain(
-      "Welcome to angular-apollo-starter!"
-    );
   }));
 });
