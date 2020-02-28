@@ -1,6 +1,6 @@
 const closures = require('./closures');
 
-fdescribe('Closure', () => {
+describe('Closure', () => {
   let closure;
   const hello = () => console.log('hello');
 
