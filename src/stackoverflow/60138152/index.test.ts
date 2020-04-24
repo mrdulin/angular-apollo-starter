@@ -11,7 +11,5 @@ fdescribe('60138152', () => {
     spyOn(AWS, 'SSM').and.callFake(() => ssmMock as any);
     const mod = require('./');
     console.log(mod.main);
-    // const actual = await main();
-    // console.log(actual);
   });
 });
