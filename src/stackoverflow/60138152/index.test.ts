@@ -1,6 +1,6 @@
 import * as AWS from 'aws-sdk';
 
-fdescribe('60138152', () => {
+describe('60138152', () => {
   it('should pass', async () => {
     const ssmMock = {
       getParameter: jasmine.createSpy().and.callFake(function(msg) {
